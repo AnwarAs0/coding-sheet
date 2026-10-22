@@ -1,0 +1,33 @@
+class Solution {
+    static boolean isEven(int n) {
+        // --- 1. MODULO OPERATOR APPROACH ---
+        // Implementation: 
+        // return (n % 2) == 0;
+        //
+        // WHAT IT IS: 
+        // The modulo operator (%) divides the number 'n' by 2 and returns 
+        // the remaining value (remainder).
+        //
+        // WHY CHOOSE MODULO OVER BITWISE AND:
+        // * Readability: It is highly intuitive and easy for any developer to 
+        //   read and understand instantly.
+        // * Standard Practice: It is the standard mathematical way taught in 
+        //   programming, making it ideal for everyday business logic where 
+        //   extreme execution speed is not a priority.
+
+        // --- 2. BITWISE AND OPERATOR APPROACH ---
+        // Implementation:
+        return (n & 1) == 0;
+        
+        // WHAT IT IS: 
+        // The bitwise AND (&) operator compares numbers at the binary level 
+        // bit-by-bit. Using '& 1' acts as a binary mask that ignores all 
+        // higher even columns and isolates only the very last bit.
+        //
+        // WHY CHOOSE BITWISE AND OVER MODULO:
+        // * Performance: It is drastically faster because it bypasses slow 
+        //   CPU division math and executes in a single hardware cycle.
+        // * Negative Numbers: It naturally handles negative numbers correctly 
+        //   without needing extra code logic.
+    }
+}
