@@ -1,0 +1,65 @@
+class Solution {
+    public int getLastDigit(String a, String b) {
+        // // Edge case: Any number raised to the power of 0 is 1
+        // if (b.equals("0")) {
+        //     return 1;
+        // }
+
+        // // 1. Get the last digit of the base string 'a'
+        // int base = a.charAt(a.length() - 1) - '0';
+
+        // // 2. Safely calculate b % 4 for a large string using modulo arithmetic
+        // int expMod = 0;
+        // for (int i = 0; i < b.length(); i++) {
+        //     expMod = (expMod * 10 + (b.charAt(i) - '0')) % 4;
+        // }
+
+        // // 3. If b % 4 is 0, use 4 as the exponent instead (4th spot in the cycle)
+        // int exponent = (expMod == 0) ? 4 : expMod;
+
+        // // 4. Calculate the last digit of (base^exponent)
+        // int result = (int) Math.pow(base, exponent);
+
+        // return result % 10;
+
+
+        // Optimized Java Solution
+
+        // 1. Edge case: Any number to the power of 0 is 1
+        if (b.equals("0")) {
+            return 1;
+        }
+
+        // 2. Extract base digit using character manipulation
+        int base = a.charAt(a.length() - 1) - '0';
+
+        // Short-circuit: 0, 1, 5, and 6 always result in themselves
+        if (base == 0 || base == 1 || base == 5 || base == 6) {
+            return base;
+        }
+
+        // 3. Optimize b % 4 calculation
+        // Mathematically, a number % 4 depends ONLY on its last two digits.
+        int len = b.length();
+        int expMod = 0;
+
+        if (len == 1) {
+            expMod = (b.charAt(0) - '0') % 4;
+        } else {
+            int lastDigit = b.charAt(len - 1) - '0';
+            int secondLastDigit = b.charAt(len - 2) - '0';
+            expMod = (secondLastDigit * 10 + lastDigit) % 4;
+        }
+
+        int exponent = (expMod == 0) ? 4 : expMod;
+
+        // 4. Eliminate Math.pow() using a high-performance lookup array or bitwise operations
+        // A simple switch or pre-calculated lookups are faster than floating-point math
+        return switch (exponent) {
+            case 1 -> base % 10;
+            case 2 -> (base * base) % 10;
+            case 3 -> (base * base * base) % 10;
+            default -> (base * base * base * base) % 10; // exponent == 4
+        };
+    }
+}
