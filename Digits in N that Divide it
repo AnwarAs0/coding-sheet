@@ -1,0 +1,71 @@
+class Solution {
+    public int divisibleByDigits(String s) {
+        // int l = s.length();
+        // int count = 0;
+
+        // // rem[d] will store (the entire massive number) % d
+        // int[] rem = new int[10];
+
+        // // Step 1: Calculate the remainder of the giant number for each divisor 1 to 9
+        // for (int d = 1; d <= 9; d++) {
+        //     long currentRem = 0;
+        //     for (int i = 0; i < l; i++) {
+        //         int digit = s.charAt(i) - '0';
+        //         currentRem = (currentRem * 10 + digit) % d;
+        //     }
+        //     rem[d] = (int) currentRem;
+        // }
+
+        // // Step 2: Iterate through the string and count valid dividing digits
+        // for (int i = 0; i < l; i++) {
+        //     int digit = s.charAt(i) - '0';
+
+        //     // The digit must be greater than 0, and must perfectly divide the whole number
+        //     if (digit > 0 && rem[digit] == 0) {
+        //         count++;
+        //     }
+        // }
+
+        // return count;
+        
+        // Performance Enhancement
+        int l = s.length();
+
+        // Track how many times each digit (0-9) appears in the string
+        int[] digitCounts = new int[10];
+
+        // Track the running remainder for each divisor (1-9) simultaneously
+        int[] rem = new int[10];
+
+        // Single Pass: Calculate all remainders and digit frequencies at the same time
+        for (int i = 0; i < l; i++) {
+            int digit = s.charAt(i) - '0';
+
+            // 1. Update the frequency of the current digit
+            digitCounts[digit]++;
+
+            // 2. Update the running modular remainder for all valid divisors 1 through 9
+            // Unrolling this manual loop prevents overhead and maximizes CPU cache performance
+            rem[1] = (rem[1] * 10 + digit) % 1;
+            rem[2] = (rem[2] * 10 + digit) % 2;
+            rem[3] = (rem[3] * 10 + digit) % 3;
+            rem[4] = (rem[4] * 10 + digit) % 4;
+            rem[5] = (rem[5] * 10 + digit) % 5;
+            rem[6] = (rem[6] * 10 + digit) % 6;
+            rem[7] = (rem[7] * 10 + digit) % 7;
+            rem[8] = (rem[8] * 10 + digit) % 8;
+            rem[9] = (rem[9] * 10 + digit) % 9;
+        }
+
+        // Step 2: Accumulate the final count using our precomputed frequencies
+        int totalCount = 0;
+        for (int d = 1; d <= 9; d++) {
+            if (rem[d] == 0) {
+                totalCount += digitCounts[d];
+            }
+        }
+
+        return totalCount;
+            
+    }
+}
