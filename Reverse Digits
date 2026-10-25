@@ -1,0 +1,26 @@
+class Solution {
+    public int reverseDigits(int n) {
+        // Code here
+        StringBuilder str = new StringBuilder(String.valueOf(n));
+        str.reverse();
+        
+        return Integer.parseInt(str.toString());
+        
+    }
+}
+
+// Optimized Code
+
+class Solution {
+    public int reverseDigits(int n) {
+        int reversed = 0;
+        
+        while (n != 0) {
+            int remainder = n % 10;
+            reversed = reversed * 10 + remainder;
+            n /= 10;
+        }
+        
+        return reversed;
+    }
+}
