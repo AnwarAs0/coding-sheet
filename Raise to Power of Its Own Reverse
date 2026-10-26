@@ -1,0 +1,49 @@
+class Solution {
+    public int reverseExponentiation(int n) {
+        // code here
+        // int num = n;
+        // int reversed = 0;
+
+        // while (n != 0) {
+        //     // 1. Extract the last digit
+        //     int digit = n % 10;
+
+        //     // 2. Append the digit to the reversed number
+        //     reversed = reversed * 10 + digit;
+
+        //     // 3. Remove the last digit from the original number
+        //     n /= 10;
+        // }
+        
+        // int pow = (int) Math.pow(num, reversed);
+        // return pow;
+
+        //  highly optimized
+        long base = n;
+                long reversed = 0;
+                int temp = n;
+                long MOD = 1000000007L; // Standard modulo to prevent overflow
+
+                // 1. Optimized Reversing Loop
+                while (temp > 0) {
+                    reversed = (reversed * 10) + (temp % 10);
+                    temp /= 10;
+                }
+
+                // 2. Performance-Optimized Binary Exponentiation O(log R)
+                long result = 1;
+                base = base % MOD; 
+
+                while (reversed > 0) {
+                    // If the current bit of reversed is 1, multiply the base into the result
+                    if ((reversed & 1) == 1) {
+                        result = (result * base) % MOD;
+                    }
+                    // Square the base and shift the exponent to the right by 1 bit
+                    base = (base * base) % MOD;
+                    reversed >>= 1; 
+                }
+
+                return (int) result;
+    }
+}
