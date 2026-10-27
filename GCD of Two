@@ -1,0 +1,46 @@
+class Solution {
+    // public static int gcd(int a, int b) {
+    //     // Base case: if b is 0, the GCD is a
+    //     if (b == 0) {
+    //         return a;
+    //     }
+    //     // Recursive case
+    //     return gcd(b, a % b);
+    // }
+    
+    
+    // High-Performance Java Solution (Stein's Algorithm)
+    public static int gcd(int a, int b) {
+        // Base cases
+        if (a == 0) return b;
+        if (b == 0) return a;
+    
+        // Finding the common factors of 2 (trailing zeros)
+        // using the built-in bitwise optimization
+        int k = Integer.numberOfTrailingZeros(a | b);
+    
+        // Remove all factors of 2 from 'a'
+        a >>= Integer.numberOfTrailingZeros(a);
+    
+        do {
+            // Remove all factors of 2 from 'b'
+            b >>= Integer.numberOfTrailingZeros(b);
+    
+            // Now both 'a' and 'b' are odd. 
+            // If a > b, swap them so we always subtract the smaller from the larger
+            if (a > b) {
+                int temp = a;
+                a = b;
+                b = temp;
+            }
+    
+            // Subtract the smaller from the larger
+            b = b - a;
+    
+        } while (b != 0);
+    
+        // Bring back the common factors of 2 we found at the beginning
+        return a << k;
+    }
+
+}
