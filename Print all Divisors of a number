@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Solution {
+    // public static List<Integer> printDivisors(int n) {
+    //     // Handle edge case for 0 or negative numbers
+    //     if (n <= 0) {
+    //         return new ArrayList<>();
+    //     }
+
+    //     ArrayList<Integer> divisors = new ArrayList<>();
+
+    //     // Loop up to the square root of n
+    //     for (int i = 1; i * i <= n; i++) {
+    //         if (n % i == 0) {
+    //             divisors.add(i); // The smaller divisor
+                
+    //             // Avoid adding the square root twice (e.g., 6 * 6 = 36)
+    //             if (i != n / i) {
+    //                 divisors.add(n / i); // The matching larger divisor
+    //             }
+    //         }
+    //     }
+
+    //     // Sort the list to return divisors in ascending order
+    //     Collections.sort(divisors);
+
+    //     return divisors;
+    // }
+
+    // Performance Enhanced
+    public static List<Integer> printDivisors(int n) {
+        if (n <= 0) {
+            return new ArrayList<>();
+        }
+
+        // Pre-allocate to minimize internal array resizing overhead
+        List<Integer> smallDivisors = new ArrayList<>();
+        List<Integer> largeDivisors = new ArrayList<>();
+
+        int i = 1;
+        // Run loop up to floor(sqrt(n)) safely handling overflow bounds
+        for (; i * i < n; i++) {
+            if (n % i == 0) {
+                smallDivisors.add(i);       // Collected in increasing order (e.g., 1, 2)
+                largeDivisors.add(n / i);   // Collected in decreasing order (e.g., 36, 18)
+            }
+        }
+
+        // Check the middle element explicitly if n is a perfect square
+        if (i * i == n) {
+            smallDivisors.add(i);
+        }
+
+        // Merge largeDivisors into smallDivisors from end to beginning
+        // This avoids calling expensive sorting algorithms entirely
+        for (int j = largeDivisors.size() - 1; j >= 0; j--) {
+            smallDivisors.add(largeDivisors.get(j));
+        }
+
+        return smallDivisors;
+    }
+}
