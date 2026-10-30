@@ -1,0 +1,66 @@
+class Solution {
+    static boolean armstrongNumber(int n) {
+        // code here
+        // Negative numbers are not considered Armstrong numbers
+        // if (n < 0) {
+        //     return false;
+        // }
+
+        // // 1. Find the number of digits using log10
+        // int digits = (n == 0) ? 1 : (int) Math.log10(n) + 1;
+
+        // int originalNumber = n;
+        // int sum = 0;
+
+        // // 2. Extract digits and calculate the sum of powers
+        // while (n > 0) {
+        //     int remainder = n % 10;
+        //     sum += Math.pow(remainder, digits);
+        //     n /= 10;
+        // }
+
+        // // 3. Check if the sum matches the original number
+        // return sum == originalNumber;
+        
+        // 1. Base cases: Negative numbers are false; single digits (0-9) are always true
+        if (n < 0) return false;
+        if (n < 10) return true;
+
+        // 2. Count digits ultra-fast using fast bit/integer math bounds
+        int digits = (n < 100) ? 2 :
+                     (n < 1000) ? 3 :
+                     (n < 10000) ? 4 :
+                     (n < 100000) ? 5 :
+                     (n < 1000000) ? 6 :
+                     (n < 10000000) ? 7 :
+                     (n < 100000000) ? 8 :
+                     (n < 1000000000) ? 9 : 10;
+
+        // 3. Performance Booster: Look-up table to eliminate Math.pow() overhead entirely
+        int[] powerLookup = new int[10];
+        for (int i = 0; i < 10; i++) {
+            int p = 1;
+            for (int j = 0; j < digits; j++) {
+                p *= i;
+            }
+            powerLookup[i] = p;
+        }
+
+        int originalNumber = n;
+        int sum = 0;
+
+        // 4. Extract digits and sum powers with early-exit strategy
+        while (n > 0) {
+            sum += powerLookup[n % 10];
+
+            // Optimization: Stop immediately if sum exceeds the original number
+            if (sum > originalNumber) {
+                return false;
+            }
+
+            n /= 10;
+        }
+
+        return sum == originalNumber;
+    }
+}
